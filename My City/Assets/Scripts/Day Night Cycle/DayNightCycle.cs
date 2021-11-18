@@ -73,31 +73,17 @@ public class DayNightCycle : MonoBehaviour
             AdjustSunColor();
             AdjustMoonColor();
         }
-        if(IsDay() == true && IsCurrentlyPlaying("Crickets") == true)
+        if(IsDay())
         {
-            FindObjectOfType<AudioManager>().Play("DayCitySounds");
-            FindObjectOfType<AudioManager>().Stop("Crickets");
-        } else if(IsDay() == false && IsCurrentlyPlaying("DayCitySounds") == true)
+            // FindObjectOfType<AudioManager>().Play("DayCitySounds");
+            // FindObjectOfType<AudioManager>().Stop("Crickets");
+        } else if(!IsDay())
         {
-            FindObjectOfType<AudioManager>().Play("Crickets");
+            // FindObjectOfType<AudioManager>().Play("Crickets");
             // FindObjectOfType<AudioManager>().Stop("DayCitySounds");
             
         }
         
-    }
-
-    public bool IsCurrentlyPlaying(string name)
-    {
-        Sound sound = new Sound();
-        sound.clip = FindObjectOfType<AudioSource>().clip;
-        if (sound.clip)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     private void UpdateTimeScale()
@@ -121,7 +107,7 @@ public class DayNightCycle : MonoBehaviour
         }
     }
 
-    private bool IsDay()
+    public bool IsDay()
     {
         // FindObjectOfType<AudioManager>().Play("");
         if (_timeOfDay < 0.75f && _timeOfDay > 0.28f)

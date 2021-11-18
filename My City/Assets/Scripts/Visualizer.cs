@@ -11,10 +11,13 @@ namespace SVS
         List<Vector3> positions = new List<Vector3>();
 
         public RoadHelper roadHelper;
+        public LightHelper lightHelper;
         public StructureHelper structureHelper;
 
         private int length = 8;
         private float angle = 90;
+
+        private Vector3 lightsPosition;
 
         public int Length
         {
@@ -76,7 +79,7 @@ namespace SVS
                         var tempPosition = currentPosition;
                         currentPosition += direction * length;
                         roadHelper.PlaceStreetPositions(tempPosition, Vector3Int.RoundToInt(direction), length);
-                        Length -= 2;
+                        Length -= 1;
                         positions.Add(currentPosition);
                         break;
                     case EncodingLetters.turnRight:
@@ -90,6 +93,7 @@ namespace SVS
             }
             roadHelper.FixRoad();
             structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
+            lightHelper.PlaceLightsPositions(roadHelper.GetRoadPositions());
         }
     }
 }

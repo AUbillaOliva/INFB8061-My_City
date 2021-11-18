@@ -7,15 +7,24 @@ namespace SVS
 {
     public class RoadHelper : MonoBehaviour
     {
+        // Los objetos de las calles
         public GameObject roadStraight, roadCorner, road3way, road4way, roadEnd;
+        // El diccionario basicamente es una lista KEY-VALUE, donde está la posicion en el plano y el
+        // objeto de la calle a colocar dentro de la posicion.
         Dictionary<Vector3Int, GameObject> dictionary = new Dictionary<Vector3Int, GameObject>();
+        // Si una calle después de insertarla, tiene fallas, se agregará a esta lista hash para volver
+        // a validar su posicionamiento.
         HashSet<Vector3Int> fixRoadCandidates = new HashSet<Vector3Int>();
 
+
+        // Entrega la lista de las calles posicionadas en el mapa. Se puede llamar de
+        // cualquier parte del codigo del proyecto para obtener la lista de las posiciones y calles del mapa
         public List<Vector3Int> GetRoadPositions()
         {
             return dictionary.Keys.ToList();
         }
 
+        // Función que se encarga de guardar en una lista, las posiciones de cada calle.
         public void PlaceStreetPositions(Vector3 startPosition, Vector3Int direction, int length)
         {
             var rotation = Quaternion.identity;
@@ -42,6 +51,7 @@ namespace SVS
 
         }
 
+        // Arregla los caminos fallados
         public void FixRoad()
         {
             foreach (var position in fixRoadCandidates)

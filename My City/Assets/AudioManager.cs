@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Audio;
 using System;
 using UnityEngine;
 
@@ -35,19 +32,6 @@ public class AudioManager : MonoBehaviour
         if (s.source.isPlaying)
         {
             s.source.Stop();
-        }
-    }
-
-    public bool IsCurrentlyPlaying(string name)
-    {
-        Sound sound = new Sound();
-        sound.clip = FindObjectOfType<AudioSource>().clip;
-        if(sound.clip)
-        {
-            return true;
-        } else
-        {
-            return false;
         }
     }
 }

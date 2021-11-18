@@ -12,6 +12,8 @@ namespace SVS
         public int sizeRequired;
         public int quantity;
         public int quantityAlreadyPlaced;
+        [SerializeField]
+        public string type;
 
         public GameObject GetPrefab()
         {
@@ -32,6 +34,11 @@ namespace SVS
         public void Reset ()
         {
             quantityAlreadyPlaced = 0;
+        }
+
+        public string GetBuildingType()
+        {
+            return type;
         }
     }
 }

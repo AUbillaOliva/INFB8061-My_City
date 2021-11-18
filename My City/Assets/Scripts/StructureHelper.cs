@@ -5,16 +5,23 @@ using UnityEngine;
 
 namespace SVS
 {
+    // Script encargado de colocar edificaciones cerca de las calles de la ciudad.
     public class StructureHelper : MonoBehaviour
     {
+        // Diccionario con las posiciones y modelos de las edificaciones.
         public Dictionary<Vector3Int, GameObject> dictionary = new Dictionary<Vector3Int, GameObject>();
+        // Tipos de edificaciones.
         public BuildingType[] buildingTypes;
+        // Tipos de modelos de naturaleza.
         public GameObject[] naturePrefabs;
+        // Generar aleatoriamente posiciones de modelos de naturaleza.
         public bool randomNaturePlacement = false;
         [Range(0, 1)]
         public float randomNaturePlacementThreshold = 0.3f;
+        // Posicion y objetos de naturaleza.
         public Dictionary<Vector3Int, GameObject> natureDictionary = new Dictionary<Vector3Int, GameObject>();
 
+        // Coloca edificaciones alrededor de caminos depeniendo de este mismo.
         public void PlaceStructuresAroundRoad(List<Vector3Int> roadPositions)
         {
             Dictionary<Vector3Int, Direction> freeEstateSpots = FindFreeSpacesAroundRoad(roadPositions);
@@ -29,16 +36,16 @@ namespace SVS
                 switch (freeSpot.Value)
                 {
                     case Direction.Up:
-                        rotation = Quaternion.Euler(-90, 90, 0);
+                        rotation = Quaternion.Euler(0, 0, 0);
                         break;
                     case Direction.Down:
-                        rotation = Quaternion.Euler(-90, -90, 0);
+                        rotation = Quaternion.Euler(0, 180, 0);
                         break;
                     case Direction.Right:
-                        rotation = Quaternion.Euler(-90, 90, 0);
+                        rotation = Quaternion.Euler(0, 90, 0);
                         break;
                     case Direction.Left:
-                        rotation = Quaternion.Euler(-90, -90, 0);
+                        rotation = Quaternion.Euler(0, -90, 0);
                         break;
                     default: break;
                 }
@@ -75,6 +82,14 @@ namespace SVS
                                 foreach (var pos in tmpPositionsBlocked)
                                 {
                                     dictionary.Add(pos, building);
+                                    // TODO: Establecer familia a la propiedad solo si el tipo de estructura es residencial.
+                                    if (buildingTypes[i].GetBuildingType().Equals("residential"))
+                                    {
+                                        Debug.Log("residential");
+                                    } else
+                                    {
+                                        Debug.Log(buildingTypes[i].GetType().GetType());
+                                    }
                                 }
                                 break;
                             }
@@ -82,6 +97,7 @@ namespace SVS
                         else
                         {
                             var building = SpawnPrefab(buildingTypes[i].GetPrefab(), freeSpot.Key, rotation);
+                            Debug.Log(buildingTypes[i].GetPrefab().ToString());
                             dictionary.Add(freeSpot.Key, building);
                         }
                         break;
@@ -90,6 +106,7 @@ namespace SVS
             }
         }
 
+        // Verifica si el tamaño de la edificacion corresponde al espacio asignado.
         private bool VerifyIfBuildingFits(
             int halfSize, 
             Dictionary<Vector3Int, Direction> freeEstateSpots, 
@@ -124,17 +141,21 @@ namespace SVS
             return true;
         }
 
+        // Coloca un prefab en la posicion señalada junto con la rotacion y objeto.
         private GameObject SpawnPrefab(GameObject prefab, Vector3Int position, Quaternion rotation)
         {
             var newStructure = Instantiate(prefab, position, rotation, transform);
             return newStructure;
         }
 
+        // Encuentra posiciones libres al rededor de las calles.
         private Dictionary<Vector3Int, Direction> FindFreeSpacesAroundRoad(List<Vector3Int> roadPositions)
         {
+            // Diccionario de la direccion y posicion de los espacios libres.
             Dictionary<Vector3Int, Direction> freeSpaces = new Dictionary<Vector3Int, Direction>();
             foreach (var position in roadPositions)
             {
+                // Encuentra las posiciones vecinas de cada estructura
                 var neightbourDirections = PlacementHelper.findNeighbour(position, roadPositions);
                 foreach (Direction direction in Enum.GetValues(typeof(Direction)))
                 {

@@ -19,7 +19,8 @@ namespace SVS
 
         private void Start()
         {
-            Debug.Log(GenerateSentence());
+            // Muestra la sentencia creada para el sistema L.
+            // Debug.Log(GenerateSentence());
         }
 
         public string GenerateSentence(string word = null)
